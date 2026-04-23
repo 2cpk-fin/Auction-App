@@ -3,7 +3,11 @@
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.auction.app.view.MainController" alignment="CENTER" spacing="10">
-    <Label fx:id="statusLabel" text="Backend Status: Unknown" />
-    <Button text="Click Me" onAction="#handleButtonClick"/>
+      fx:controller="com.auction.app.view.MainController"
+      alignment="CENTER" spacing="10">
+
+    <fx:include source="UserView.fxml" />
+
+    <Label fx:id="statusLabel" text="Backend Status: Ready" />
+    <Button text="Refresh View" onAction="#handleButtonClick"/>
 </VBox>
