@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.URL;
 
 @Getter
 @Setter
@@ -21,6 +20,5 @@ public class UserRequest {
     @Size(min = 6, max = 16, message = "Password must be at least 6 characters")
     private String password;
 
-    @URL
     private String profilePicture;
 }
