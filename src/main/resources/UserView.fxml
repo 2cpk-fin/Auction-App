@@ -35,10 +35,6 @@
             <TextField fx:id="emailField" promptText="Enter new email" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Button mnemonicParsing="false" onAction="#onUpdateEmail" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="1" />
 
-            <Label text="Profile Pic URL:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-            <TextField fx:id="profilePicField" promptText="http://image-url.com" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button mnemonicParsing="false" onAction="#onUpdateProfilePicture" text="Update" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-
             <Label text="Password Verification:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
             <PasswordField fx:id="passwordField" promptText="Required for changes" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Button mnemonicParsing="false" onAction="#onUpdatePassword" text="Verify/Update" GridPane.columnIndex="2" GridPane.rowIndex="3" />
