@@ -34,4 +34,5 @@ public class ProductRequest {
     @NotNull(message = "At least one tag ID must be provided")
     @Size(min = 1, message = "Product must have at least one tag")
     private List<Long> tagIds;
+
 }
