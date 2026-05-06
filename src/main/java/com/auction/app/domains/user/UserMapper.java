@@ -28,10 +28,9 @@ public class UserMapper {
 
         UserResponse response = new UserResponse();
         response.setUserId(user.getUserId());
-        response.setPublicUserId(user.getPublicUserId());
+        response.setPublicUserId(user.getAccountNumber());
         response.setUsername(user.getUsername());
         response.setEmail(user.getEmail());
-        response.setProfilePicture(user.getProfilePicture());
 
         return response;
     }
@@ -44,9 +43,6 @@ public class UserMapper {
         }
         if (request.getEmail() != null && !request.getEmail().isBlank()) {
             user.setEmail(request.getEmail());
-        }
-        if (request.getProfilePicture() != null) {
-            user.setProfilePicture(request.getProfilePicture());
         }
     }
 }

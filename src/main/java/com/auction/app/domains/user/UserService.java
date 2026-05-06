@@ -37,9 +37,9 @@ public class UserService {
     }
 
     @Transactional
-    public UserResponse updateProfilePicture(Long userId, String newUrl) {
+    public UserResponse updateProfilePicture(Long userId, String newImage) {
         User user = findUserById(userId);
-        user.setProfilePicture(newUrl); // URL can be null to remove picture
+        user.setProfilePicture(newImage); // URL can be null to remove picture
         return userMapper.userToResponse(userRepository.save(user));
     }
 

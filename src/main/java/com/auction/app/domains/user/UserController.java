@@ -17,7 +17,6 @@ public class UserController {
     // These fx:id names must match exactly what you put in Scene Builder / FXML
     @FXML private TextField usernameField;
     @FXML private TextField emailField;
-    @FXML private TextField profilePicField;
     @FXML private PasswordField passwordField;
     @FXML private Label messageLabel;
 
@@ -34,7 +33,6 @@ public class UserController {
             UserResponse user = userService.getUserById(loggedInUserId);
             usernameField.setText(user.getUsername());
             emailField.setText(user.getEmail());
-            profilePicField.setText(user.getProfilePicture());
         } catch (Exception e) {
             showError("Could not load profile: " + e.getMessage());
         }
@@ -60,19 +58,6 @@ public class UserController {
             String newEmail = emailField.getText();
             UserResponse response = userService.updateEmail(loggedInUserId, newEmail);
             showSuccess("Email updated to: " + response.getEmail());
-        }
-        catch (Exception e) {
-            showError(e.getMessage());
-        }
-    }
-
-    // Called by the "Update Picture" button in FXML
-    @FXML
-    public void onUpdateProfilePicture() {
-        try {
-            String url = profilePicField.getText();
-            userService.updateProfilePicture(loggedInUserId, url);
-            showSuccess("Profile picture updated!");
         }
         catch (Exception e) {
             showError(e.getMessage());
