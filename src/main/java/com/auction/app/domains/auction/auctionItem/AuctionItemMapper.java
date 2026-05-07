@@ -48,7 +48,6 @@ public class AuctionItemMapper {
                 .quantity(entity.getQuantity())
                 .startingPrice(entity.getStartingPrice())
                 .bidIncrement(entity.getBidIncrement())
-                .currentHighestBid(currentHighestBid)
                 .totalBidsPlaced(totalBidsPlaced)
                 .build();
     }
