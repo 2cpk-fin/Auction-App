@@ -1,7 +1,8 @@
 package com.auction.app.domains.bid;
 
 import com.auction.app.domains.auction.Auction;
-import com.auction.app.domains.product.Product;
+import com.auction.app.domains.auction.auctionItem.AuctionItem;
+import com.auction.app.domains.transaction.Transaction;
 import com.auction.app.domains.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -34,10 +35,10 @@ public class Bid {
     private User bidder;
 
     // Each bid can only have one product (Product - Bid)
-    @NotNull(message = "Product reference is required")
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false, unique = true)
-    private Product product;
+    @NotNull(message = "Item reference is required")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auction_item_id", nullable = false)
+    private AuctionItem auctionItem;
 
     // Bid price's here to track money change
     @NotNull(message = "Bid price is required")
@@ -49,12 +50,11 @@ public class Bid {
     @NotNull(message = "Bid timestamp is required")
     @Column(
             name = "bid_at",
-            nullable = false,
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+            nullable = false
     )
     private LocalDateTime bidAt;
 
     // One bid have one transaction (Bid - Transaction)
     @OneToOne(mappedBy = "bid", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Bid bid;
+    private Transaction transaction;
 }

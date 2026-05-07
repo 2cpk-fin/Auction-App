@@ -1,12 +1,11 @@
 package com.auction.app.domains.auction;
 
+import com.auction.app.domains.auction.auctionItem.AuctionItem;
 import com.auction.app.domains.bid.Bid;
-import com.auction.app.domains.product.Product;
 import com.auction.app.domains.user.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -14,6 +13,9 @@ import java.util.List;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "auctions")
 public class Auction {
@@ -29,9 +31,9 @@ public class Auction {
     private User seller;
 
     // One auction contains many products (Auction - Product)
-    @NotNull(message = "Product reference is required")
+    @NotNull(message = "Item reference is required")
     @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Product> productList;
+    private List<AuctionItem> auctionItems;
 
     // One auction contains many bids (Auction - Bid)
     @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)

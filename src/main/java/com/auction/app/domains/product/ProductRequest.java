@@ -23,10 +23,6 @@ public class ProductRequest {
     @DecimalMin(value = "0.0", inclusive = false, message = "Price must be greater than 0")
     private BigDecimal price;
 
-    @NotNull(message = "Bid increment is required")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Bid increment must be greater than 0")
-    private BigDecimal bidIncrement;
-
     @NotNull(message = "Quantity is required")
     @Min(value = 1, message = "Quantity must be at least 1")
     private Integer quantity;

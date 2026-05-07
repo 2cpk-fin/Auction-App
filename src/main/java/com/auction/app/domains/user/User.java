@@ -5,10 +5,11 @@ import com.auction.app.domains.bid.Bid;
 import com.auction.app.domains.product.Product;
 import com.auction.app.domains.transaction.Transaction;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -19,41 +20,34 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @UuidGenerator
     @Column(
             name = "public_user_id",
             nullable = false,
-            updatable = false,
-            columnDefinition = "UUID DEFAULT gen_random_uuid()"
+            updatable = false
     )
     private UUID accountNumber;
 
     @Column(name = "username", nullable = false)
-    @Size(max = 255, message = "Username must not exceed 255 characters")
     private String username;
 
     @Column(name = "email", unique = true, nullable = false)
-    @Size(max = 255, message = "Email must not exceed 255 characters")
     private String email;
 
     @Column(name = "password", nullable = false)
-    @Size(min = 6, max = 25, message = "Invalid password length")
     private String password;
 
     @Column(name = "balance", precision = 15, scale = 2)
-    @DecimalMin(value = "0.0", message = "Balance must be positive")
     private BigDecimal balance;
 
-    @Column(
-            name = "create_at",
-            nullable = false,
-            updatable = false,
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
-    )
+    @CreatedDate
+    @Column(name = "create_at", nullable = false, updatable = false)
     private Instant createAt;
 
     // One user can create many products (User - Product)
