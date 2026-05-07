@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+
+<StackPane
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.auction.app.domains.auth.AuthController"
+        prefWidth="400" prefHeight="800"
+        style="-fx-background-color: #FFFFFF; -fx-font-family: 'Segoe UI', Helvetica, sans-serif;">
+
+    <!-- Background accents (These stay still while the forms slide) -->
+    <Circle radius="180" fill="#EEF2FF" opacity="0.6" translateX="150" translateY="-300"/>
+    <Circle radius="120" fill="#F3E8FF" opacity="0.5" translateX="-150" translateY="350"/>
+
+    <!-- ── REGISTER CONTAINER (Starts off-screen to the right) ── -->
+    <VBox fx:id="registerContainer" alignment="TOP_CENTER" translateX="400"
+          style="-fx-padding: 60 30 40 30; -fx-background-color: transparent;">
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <!-- Brand Header -->
+        <VBox alignment="CENTER" spacing="20">
+            <StackPane>
+                <Circle radius="35" style="-fx-fill: linear-gradient(to bottom right, #4F46E5, #8B5CF6);"/>
+                <Text text="⚖" style="-fx-font-size: 30; -fx-fill: white;"/>
+            </StackPane>
+            <VBox alignment="CENTER" spacing="6">
+                <Label text="Create account" style="-fx-font-size: 26; -fx-text-fill: #0F172A;"/>
+                <Label text="Join BidVault today" style="-fx-font-size: 14; -fx-text-fill: #64748B;"/>
+            </VBox>
+        </VBox>
+
+        <Region prefHeight="40"/>
+
+        <!-- Inputs -->
+        <VBox spacing="16">
+            <VBox spacing="8">
+                <Label text="Username" style="-fx-font-size: 12; -fx-text-fill: #475569;"/>
+                <TextField fx:id="registerUsernameField" promptText="bidder_name"
+                           style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 14; -fx-text-fill: #0F172A; -fx-font-size: 14;"/>
+            </VBox>
+
+            <VBox spacing="8">
+                <Label text="Email Address" style="-fx-font-size: 12; -fx-text-fill: #475569;"/>
+                <TextField fx:id="registerEmailField" promptText="name@example.com"
+                           style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 14; -fx-text-fill: #0F172A; -fx-font-size: 14;"/>
+            </VBox>
+
+            <VBox spacing="8">
+                <Label text="Password" style="-fx-font-size: 12; -fx-text-fill: #475569;"/>
+                <PasswordField fx:id="registerPasswordField" promptText="6 - 16 characters"
+                               style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 14; -fx-text-fill: #0F172A; -fx-font-size: 14;"/>
+            </VBox>
+        </VBox>
+
+        <Label fx:id="registerErrorLabel" visible="false" wrapText="true"
+               style="-fx-text-fill: #EF4444; -fx-font-size: 12; -fx-padding: 15 0 0 0;"/>
+
+        <Region prefHeight="25"/>
+
+        <Button fx:id="registerButton" text="Sign Up" maxWidth="Infinity" onAction="#handleRegister"
+                style="-fx-background-color: linear-gradient(to right, #4F46E5, #8B5CF6); -fx-text-fill: #FFFFFF; -fx-background-radius: 12; -fx-padding: 16; -fx-font-size: 15; -fx-cursor: hand;"/>
+
+        <Region prefHeight="25"/>
+
+        <HBox alignment="CENTER" spacing="5">
+            <Label text="Already a member?" style="-fx-font-size: 13; -fx-text-fill: #64748B;"/>
+            <Button text="Sign in instead" onAction="#goToLogin"
+                    style="-fx-background-color: transparent; -fx-text-fill: #4F46E5; -fx-padding: 0; -fx-font-size: 13; -fx-cursor: hand;"/>
+        </HBox>
+
+        <Region VBox.vgrow="ALWAYS"/>
+    </VBox>
+
+    <!-- ── LOGIN CONTAINER (Starts on-screen at X=0) ── -->
+    <VBox fx:id="loginContainer" alignment="TOP_CENTER" translateX="0"
+          style="-fx-padding: 60 30 40 30; -fx-background-color: transparent;">
+
+        <Region VBox.vgrow="ALWAYS"/>
+
+        <!-- Brand Header -->
+        <VBox alignment="CENTER" spacing="20">
+            <StackPane>
+                <Circle radius="35" style="-fx-fill: linear-gradient(to bottom right, #4F46E5, #8B5CF6);"/>
+                <Text text="⚖" style="-fx-font-size: 30; -fx-fill: white;"/>
+            </StackPane>
+            <VBox alignment="CENTER" spacing="6">
+                <Label text="Welcome back" style="-fx-font-size: 26; -fx-text-fill: #0F172A;"/>
+                <Label text="Sign in to continue to BidVault" style="-fx-font-size: 14; -fx-text-fill: #64748B;"/>
+            </VBox>
+        </VBox>
+
+        <Region prefHeight="50"/>
+
+        <!-- Inputs -->
+        <VBox spacing="20">
+            <VBox spacing="8">
+                <Label text="Email Address" style="-fx-font-size: 12; -fx-text-fill: #475569;"/>
+                <TextField fx:id="loginEmailField" promptText="name@example.com"
+                           style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 14; -fx-text-fill: #0F172A; -fx-font-size: 14;"/>
+            </VBox>
+
+            <VBox spacing="8">
+                <Label text="Password" style="-fx-font-size: 12; -fx-text-fill: #475569;"/>
+                <PasswordField fx:id="loginPasswordField" promptText="••••••••"
+                               style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 12; -fx-background-radius: 12; -fx-padding: 14; -fx-text-fill: #0F172A; -fx-font-size: 14;"/>
+            </VBox>
+        </VBox>
+
+        <Label fx:id="loginErrorLabel" visible="false" wrapText="true"
+               style="-fx-text-fill: #EF4444; -fx-font-size: 12; -fx-padding: 15 0 0 0;"/>
+
+        <Region prefHeight="30"/>
+
+        <Button fx:id="loginButton" text="Sign In" maxWidth="Infinity" onAction="#handleLogin"
+                style="-fx-background-color: linear-gradient(to right, #4F46E5, #8B5CF6); -fx-text-fill: #FFFFFF; -fx-background-radius: 12; -fx-padding: 16; -fx-font-size: 15; -fx-cursor: hand;"/>
+
+        <Region prefHeight="25"/>
+
+        <HBox alignment="CENTER" spacing="5">
+            <Label text="New here?" style="-fx-font-size: 13; -fx-text-fill: #64748B;"/>
+            <Button text="Create an account" onAction="#goToRegister"
+                    style="-fx-background-color: transparent; -fx-text-fill: #4F46E5; -fx-padding: 0; -fx-font-size: 13; -fx-cursor: hand;"/>
+        </HBox>
+
+        <Region VBox.vgrow="ALWAYS"/>
+    </VBox>
+
+</StackPane>

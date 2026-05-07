@@ -1,30 +1,34 @@
 package com.auction.app.domains.auction;
 
-import com.auction.app.domains.product.ProductRequest;
-import lombok.Getter;
-import lombok.Setter;
+import com.auction.app.domains.auction.auctionItem.AuctionItemRequest;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class AuctionRequest {
-    // Seller will send their id
-    private Long sellerId;
 
-    // And a list of products
-    private List<UserProductRequest> productRequestList;
+    @NotBlank(message = "Auction title is required")
+    private String title;
 
-    // They can choose startTime and endTime
-    // ( min(startTime) = now + 1 day )
-    // ( max(endTime - startTime) = 1 day )
+    private String description;
+
+    @NotNull(message = "Start time is required")
+    @FutureOrPresent(message = "Start time cannot be in the past")
     private LocalDateTime startTime;
-    private LocalDateTime endTime;
-}
 
-@Getter
-class UserProductRequest {
-    private Long productId;
-    private Integer quantity;
+    @NotNull(message = "End time is required")
+    @Future(message = "End time must be in the future")
+    private LocalDateTime endTime;
+
+    @NotEmpty(message = "You must include at least one item in the auction")
+    @Valid
+    private List<AuctionItemRequest> auctionItems;
 }

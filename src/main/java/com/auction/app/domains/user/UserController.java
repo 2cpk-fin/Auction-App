@@ -1,11 +1,17 @@
 package com.auction.app.domains.user;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Component
@@ -13,8 +19,8 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final ApplicationContext springContext;
 
-    // These fx:id names must match exactly what you put in Scene Builder / FXML
     @FXML private TextField usernameField;
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
@@ -23,10 +29,6 @@ public class UserController {
     // TODO: Replace with actual session logic later
     private final Long loggedInUserId = 1L;
 
-    /**
-     * This method runs automatically when the FXML is loaded.
-     * Use it to fetch the user data so the fields aren't empty.
-     */
     @FXML
     public void initialize() {
         try {
@@ -38,33 +40,28 @@ public class UserController {
         }
     }
 
-    // Called by "Save Username" button
     @FXML
     public void onUpdateUsername() {
         try {
             String newUsername = usernameField.getText();
             UserResponse response = userService.updateUsername(loggedInUserId, newUsername);
-            showSuccess("Username updated to: " + response.getUsername());
-        }
-        catch (Exception e) {
+            showSuccess("Username updated successfully.");
+        } catch (Exception e) {
             showError(e.getMessage());
         }
     }
 
-    // Called by the "Save Email" button in FXML
     @FXML
     public void onUpdateEmail() {
         try {
             String newEmail = emailField.getText();
             UserResponse response = userService.updateEmail(loggedInUserId, newEmail);
-            showSuccess("Email updated to: " + response.getEmail());
-        }
-        catch (Exception e) {
+            showSuccess("Email updated successfully.");
+        } catch (Exception e) {
             showError(e.getMessage());
         }
     }
 
-    // Called by the "Change Password" button in FXML
     @FXML
     public void onUpdatePassword() {
         try {
@@ -72,13 +69,11 @@ public class UserController {
             userService.updatePassword(loggedInUserId, newPass);
             showSuccess("Password changed successfully!");
             passwordField.clear();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             showError(e.getMessage());
         }
     }
 
-    // Called by a "Delete Account" button
     @FXML
     public void onDeleteAccount() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete account? This cannot be undone.");
@@ -88,22 +83,54 @@ public class UserController {
             try {
                 userService.deleteUserById(loggedInUserId);
                 showSuccess("Account deleted.");
-                // Redirect logic would go here
-            }
-            catch (Exception e) {
+                handleLogout(); // Kick them out to AuthView after deletion
+            } catch (Exception e) {
                 showError(e.getMessage());
             }
         }
     }
 
-    // Helper UI Methods
+    // ── NAVIGATION METHODS ──────────────────────────────────────────────────
+
+    @FXML
+    public void goBack() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/HomeView.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Parent root = loader.load();
+            Stage stage = (Stage) messageLabel.getScene().getWindow();
+            stage.setTitle("BidVault");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleLogout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/AuthView.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Parent root = loader.load();
+            Stage stage = (Stage) messageLabel.getScene().getWindow();
+            stage.setTitle("BidVault — Authentication");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ── UI HELPERS ──────────────────────────────────────────────────────────
+
     private void showSuccess(String message) {
         messageLabel.setText(message);
-        messageLabel.setTextFill(Color.GREEN);
+        messageLabel.setTextFill(Color.web("#4F46E5"));
     }
 
     private void showError(String message) {
-        messageLabel.setText("Error: " + message);
-        messageLabel.setTextFill(Color.RED);
+        messageLabel.setText(message);
+        messageLabel.setTextFill(Color.web("#EF4444"));
     }
 }

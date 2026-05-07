@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TagMapper {
 
-    public TagResponse tagToResponse(Tag tag){
+    public TagResponse toResponse(Tag tag){
         TagResponse tagResponse = new TagResponse();
 
         tagResponse.setTagName(tag.getTagName());

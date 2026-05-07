@@ -13,7 +13,6 @@ public class ProductResponse {
     private Long productId;
     private String productName;
     private BigDecimal price;
-    private BigDecimal bidIncrement;
     private Integer quantity;
     private List<TagResponse> tags;
 }

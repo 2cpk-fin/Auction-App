@@ -1,20 +1,20 @@
 package com.auction.app.domains.auction;
 
+import com.auction.app.domains.auction.auctionItem.AuctionItem;
+import com.auction.app.domains.auction.auctionItem.AuctionItemMapper;
 import com.auction.app.domains.product.Product;
 import com.auction.app.domains.product.ProductRepository;
 import com.auction.app.domains.user.User;
 import com.auction.app.domains.user.UserMapper;
-import com.auction.app.domains.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class AuctionMapper {
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -22,42 +22,60 @@ public class AuctionMapper {
     @Autowired
     private UserMapper userMapper;
 
-    Auction toAuction(AuctionRequest auctionRequest) {
-        Auction auction = new Auction();
+    @Autowired
+    private AuctionItemMapper auctionItemMapper;
 
-        User seller = userRepository.findById(auctionRequest.getSellerId())
-                .orElseThrow(() -> new RuntimeException("User not found!"));
-
-        List<Product> productList = new ArrayList<>();
-        for (UserProductRequest request : auctionRequest.getProductRequestList()) {
-            Product product = productRepository.findById(request.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
-
-            if (product.getQuantity() < request.getQuantity()) {
-                throw new RuntimeException("Not enough products");
-            }
-
-            productList.add(product);
+    public Auction toAuction(AuctionRequest request, User seller) {
+        if (request == null) {
+            return null;
         }
 
+        Auction auction = new Auction();
         auction.setSeller(seller);
-        auction.setProductList(productList);
-        auction.setStartTime(auctionRequest.getStartTime());
-        auction.setEndTime(auctionRequest.getEndTime());
+        auction.setStartTime(request.getStartTime());
+        auction.setEndTime(request.getEndTime());
         auction.setStatus(AuctionStatus.UPCOMING);
+
+        auction.setBidList(new ArrayList<>());
+        List<AuctionItem> auctionItems = new ArrayList<>();
+
+        if (request.getAuctionItems() != null) {
+            for (var itemRequest : request.getAuctionItems()) {
+                Product product = productRepository.findById(itemRequest.getProductId())
+                        .orElseThrow(() -> new RuntimeException("Product not found with ID: " + itemRequest.getProductId()));
+
+                if (product.getQuantity() < itemRequest.getQuantity()) {
+                    throw new RuntimeException("Not enough products in stock for ID: " + product.getProductId());
+                }
+
+                AuctionItem item = auctionItemMapper.toAuctionItem(itemRequest, product);
+
+                item.setAuction(auction);
+                auctionItems.add(item);
+            }
+        }
+
+        auction.setAuctionItems(auctionItems);
 
         return auction;
     }
 
-    AuctionResponse toAuctionResponse(Auction auction) {
-        AuctionResponse auctionResponse = new AuctionResponse();
+    public AuctionResponse toResponse(Auction auction) {
+        if (auction == null) {
+            return null;
+        }
 
-        auctionResponse.setAuctionId(auction.getAuctionId());
-        auctionResponse.setSeller(userMapper.userToResponse(auction.getSeller()));
-        auctionResponse.setStartTime(auction.getStartTime());
-        auctionResponse.setEndTime(auction.getEndTime());
-        auctionResponse.setStatus(auction.getStatus());
-
-        return auctionResponse;
+        return AuctionResponse.builder()
+                .auctionId(auction.getAuctionId())
+                .seller(auction.getSeller() != null ? userMapper.userToResponse(auction.getSeller()) : null)
+                .auctionItems(auction.getAuctionItems() != null ?
+                        auction.getAuctionItems().stream()
+                        .map(auctionItemMapper::toResponse)
+                        .collect(Collectors.toList())
+                        : new ArrayList<>())
+                .startTime(auction.getStartTime())
+                .endTime(auction.getEndTime())
+                .status(auction.getStatus())
+                .build();
     }
 }
