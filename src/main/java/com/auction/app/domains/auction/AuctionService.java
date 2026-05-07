@@ -6,6 +6,9 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AuctionService {
 
@@ -38,8 +41,67 @@ public class AuctionService {
         return "Successfully registered auction";
     }
 
+    public AuctionResponse createAuction(AuctionRequest auctionRequest, String email) {
+
+    }
+
+    public AuctionResponse updateAuction(AuctionRequest auctionRequest, String email, long auctionId) {
+
+    }
+
+    public void deleteAuction(long auctionId) {
+
+    }
+
+    public List<AuctionResponse> showAllUserAuctions(String email) {
+
+    }
+
     public Auction findAuctionById(long id) {
         return auctionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Auction with id: " + id + " not found"));
+    }
+
+
+    public List<AuctionResponse> getAllUpcomingAuction() {
+        List<Auction> auctionList = auctionRepository.findAllUpcomingAuction();
+
+        List<AuctionResponse> auctionResponses = new ArrayList<>();
+
+        for (Auction auction : auctionList) {
+            auctionResponses.add(auctionMapper.toResponse(auction));
+        }
+
+        return auctionResponses;
+    }
+
+    public List<AuctionResponse> getAllActiveAuction() {
+        List<Auction> auctionList = auctionRepository.findAllActiveAuction();
+        List<AuctionResponse> auctionResponses = new ArrayList<>();
+        for (Auction auction : auctionList) {
+            auctionResponses.add(auctionMapper.toResponse(auction));
+        }
+        return auctionResponses;
+    }
+    public List<AuctionResponse> getAllCompletedAuction() {
+        List<Auction> autionList =auctionRepository.findAllCompleteAuction();
+        List<AuctionResponse> auctionResponses = new ArrayList<>();
+        for (Auction auction : autionList) {
+            auctionResponses.add(auctionMapper.toResponse(auction));
+
+        }
+        return auctionResponses;
+
+    }
+    public List<AuctionResponse> getAllCanceledAuction() {
+        List<Auction> autionList = auctionRepository.findAllCancelledAuction();
+        List<AuctionResponse> auctionResponses = new ArrayList<>();
+        for (Auction auction : autionList) {
+            auctionResponses.add(auctionMapper.toResponse(auction));
+
+        }
+        return auctionResponses;
+
+
     }
 
     private User findByEmail(String email) {
