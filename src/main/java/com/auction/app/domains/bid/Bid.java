@@ -5,56 +5,49 @@ import com.auction.app.domains.auction.auctionItem.AuctionItem;
 import com.auction.app.domains.transaction.Transaction;
 import com.auction.app.domains.user.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "bids")
 public class Bid {
+
+    /*
+        Required information for bid
+    */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bidId;
 
-    // It's possible to have many bids inside the auction (Auction - Bid)
-    @ManyToOne
-    @JoinColumn(name = "auction_id", nullable = false)
-    private Auction auction;
-
-    // One bidder can bid many times (User - Bid)
-    @NotNull(message = "Bidder reference is required")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bidder_id", nullable = false)
     private User bidder;
 
-    // Each bid can only have one product (Product - Bid)
-    @NotNull(message = "Item reference is required")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auction_id", nullable = false)
+    private Auction auction;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "auction_item_id", nullable = false)
     private AuctionItem auctionItem;
 
-    // Bid price's here to track money change
-    @NotNull(message = "Bid price is required")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Bid price must be strictly greater than 0")
-    @Column(name = "bid_price", nullable = false)
+    @Column(name = "bid_price", precision = 15, scale = 2, nullable = false)
     private BigDecimal bidPrice;
 
-    // Store the bid time
-    @NotNull(message = "Bid timestamp is required")
-    @Column(
-            name = "bid_at",
-            nullable = false
-    )
-    private LocalDateTime bidAt;
+    @CreatedDate
+    @Column(name = "bid_at", nullable = false)
+    private Instant bidAt;
 
-    // One bid have one transaction (Bid - Transaction)
+    // This is for after bid
     @OneToOne(mappedBy = "bid", cascade = CascadeType.ALL, orphanRemoval = true)
     private Transaction transaction;
 }

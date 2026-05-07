@@ -35,18 +35,15 @@ public class AuctionItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @NotNull(message = "Auction quantity is required")
-    @Min(value = 1, message = "Quantity must be at least 1")
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
-    @NotNull(message = "Starting price is required")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Starting price must be strictly greater than 0")
     @Column(name = "starting_price", precision = 15, scale = 2, nullable = false)
     private BigDecimal startingPrice;
 
-    @NotNull(message = "Bid increment is required")
-    @DecimalMin(value = "0.0", inclusive = false, message = "Bid increment must be strictly greater than 0")
+    @Column(name = "highest_price", precision = 15, scale = 2, nullable = false)
+    private BigDecimal highestPrice;
+
     @Column(name = "bid_increment", precision = 15, scale = 2, nullable = false)
     private BigDecimal bidIncrement;
 

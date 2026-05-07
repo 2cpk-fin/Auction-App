@@ -1,6 +1,5 @@
 package com.auction.app.domains.bid;
 
-import com.auction.app.domains.user.UserResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,9 +10,9 @@ import java.time.Instant;
 @Getter
 @Setter
 @Builder
-public class BidResponse {
-    private Long bidId;
-    private String itemName;
+public class BidderResponse {
+    private String username;
+    private String profileImage;
     private BigDecimal bidPrice;
     private Instant bidAt;
 }

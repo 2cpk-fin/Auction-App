@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 @Setter
 public class BidRequest {
     private Long auctionId;
-    private Long bidderId;
-    private Long productId;
+    private Long auctionItemId;
     private BigDecimal bidPrice;
 }

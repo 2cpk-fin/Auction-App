@@ -27,11 +27,7 @@ public class User {
     private Long userId;
 
     @UuidGenerator
-    @Column(
-            name = "public_user_id",
-            nullable = false,
-            updatable = false
-    )
+    @Column(name = "public_user_id", nullable = false, updatable = false)
     private UUID accountNumber;
 
     @Column(name = "username", nullable = false)
@@ -50,15 +46,12 @@ public class User {
     @Column(name = "create_at", nullable = false, updatable = false)
     private Instant createAt;
 
-    // One user can create many products (User - Product)
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> productList;
 
-    // One user can host many auction sessions (Auction - User)
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Auction> auctionList;
 
-    // One user can bid many times in one auction (User - Bid)
     @OneToMany(mappedBy = "bidder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bid> bidList;
 

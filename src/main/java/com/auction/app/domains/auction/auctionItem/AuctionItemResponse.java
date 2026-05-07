@@ -1,10 +1,12 @@
 package com.auction.app.domains.auction.auctionItem;
 
+import com.auction.app.domains.bid.BidderResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,6 +22,6 @@ public class AuctionItemResponse {
     private BigDecimal startingPrice;
     private BigDecimal bidIncrement;
 
-    private BigDecimal currentHighestBid;
+    private List<BidderResponse> topBids;
     private Integer totalBidsPlaced;
 }
