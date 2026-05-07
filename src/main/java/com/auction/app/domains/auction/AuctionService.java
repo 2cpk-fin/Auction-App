@@ -1,48 +1,31 @@
 package com.auction.app.domains.auction;
 
-import com.auction.app.domains.user.User;
-import com.auction.app.domains.user.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.auction.app.domains.bid.BidResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-@Service
-public class AuctionService {
+import java.util.List;
+import java.util.UUID;
 
-    @Autowired
-    private AuctionRepository auctionRepository;
+public interface AuctionService {
 
-    @Autowired
-    private AuctionMapper auctionMapper;
+    AuctionResponse createAuction(AuctionRequest request, UUID sellerId);
 
-    @Autowired
-    private UserRepository userRepository;
+    AuctionResponse getAuctionById(UUID id);
 
-    AuctionResponse createAuction(AuctionRequest auctionRequest, String email){
-        User seller = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-        Auction auction = auctionMapper.toAuction(auctionRequest, seller);
-        auctionRepository.save(auction);
-        return auctionMapper.toResponse(auction);
-    }
+    Page<AuctionResponse> searchAuctions(String category, String auctionType, Long minPrice, Long maxPrice, String itemName, Pageable pageable);
 
-    public String registerAuction(long auctionId, String email) {
-        User user = findByEmail(email);
-        Auction auction = findAuctionById(auctionId);
+    Page<AuctionResponse> getBrowseAuctions(Pageable pageable);
 
-        boolean isRegistered = auction.getRegisteredUsers().get(user.getUserId());
-        if (isRegistered) {
-            return "User is already registered for this auction";
-        }
+    BidResponse placeBid(UUID auctionId, UUID bidderId, Long amount);
 
-        auction.getRegisteredUsers().put(user.getUserId(), true);
-        return "Successfully registered auction";
-    }
+    AuctionResponse buyInstant(UUID auctionId, UUID buyerId);
 
-    public Auction findAuctionById(long id) {
-        return auctionRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Auction with id: " + id + " not found"));
-    }
+    AuctionResponse cancelAuction(UUID auctionId, UUID sellerId);
 
-    private User findByEmail(String email) {
-        return userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("User with email: " + email + " not found"));
-    }
+    List<AuctionResponse> getSellerAuctions(UUID sellerId);
+
+    Page<AuctionClaimResponse> getUnclaimedItems(UUID userId, Pageable pageable);
+
+    AuctionClaimResponse collectClaim(UUID claimId, UUID userId);
 }

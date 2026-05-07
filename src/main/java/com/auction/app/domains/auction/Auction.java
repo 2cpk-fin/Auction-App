@@ -1,16 +1,16 @@
 package com.auction.app.domains.auction;
 
-import com.auction.app.domains.auction.auctionItem.AuctionItem;
 import com.auction.app.domains.bid.Bid;
 import com.auction.app.domains.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -21,42 +21,60 @@ import java.util.Map;
 @Table(name = "auctions")
 public class Auction {
 
-    /*
-    Required information to create new auction
-    Also, this is the basic stat
-    */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long auctionId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", nullable = false)
     private User seller;
 
-    @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AuctionItem> auctionItems;
+    @Column(name = "item_name", nullable = false)
+    private String itemName;
+
+    @Column(name = "item_category")
+    private String itemCategory;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auction_type", nullable = false)
+    private AuctionType auctionType;
+
+    @Column(name = "starting_bid", nullable = false)
+    private Long startingBid;
+
+    @Column(name = "bin_price")
+    private Long binPrice;
+
+    @Column(name = "current_bid", nullable = false)
+    private Long currentBid;
+
+    @Column(name = "highest_bidder_id")
+    private UUID highestBidderId;
 
     @Column(name = "start_time", nullable = false)
-    private LocalDateTime startTime;
+    private Instant startTime;
 
     @Column(name = "end_time", nullable = false)
-    private LocalDateTime endTime;
+    private Instant endTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AuctionStatus status;
 
-    // The registration table
-    @ElementCollection
-    @CollectionTable(name = "auction_registrations", joinColumns = @JoinColumn(name = "auction_id"))
-    @MapKeyColumn(name = "user_id")
-    @Column(name = "is_registered")
-    @Builder.Default
-    private Map<Long, Boolean> registeredUsers = new HashMap<>();
+    @Column(nullable = false)
+    private Boolean claimed = false;
 
-    // One auction contains many bids (Auction - Bid)
+    @Version
+    private Long version;
+
     @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<Bid> bidList = new ArrayList<>();
+    private List<Bid> bids = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "auction_bidders", joinColumns = @JoinColumn(name = "auction_id"))
+    @Column(name = "bidder_id")
+    @Builder.Default
+    private Set<UUID> bidderNotifications = new HashSet<>();
 
 }

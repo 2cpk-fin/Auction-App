@@ -47,8 +47,4 @@ public class AuctionItem {
     @Column(name = "bid_increment", precision = 15, scale = 2, nullable = false)
     private BigDecimal bidIncrement;
 
-    // People bid on the specific item in the auction, NOT the product in storage
-    @OneToMany(mappedBy = "auctionItem", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
-    private List<Bid> bids = new ArrayList<>();
 }

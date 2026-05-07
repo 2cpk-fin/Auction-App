@@ -1,4 +1,4 @@
-package com.auction.app.domains.bid;
+package com.auction.app.domains.auction;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,10 +12,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BidResponse {
+public class AuctionClaimResponse {
     private UUID id;
+    private UUID userId;
     private UUID auctionId;
-    private UUID bidderId;
-    private Long amount;
-    private Instant timestamp;
+    private String itemName;
+    private Long coinAmount;
+    private AuctionClaimType claimType;
+    private Boolean claimed;
+    private Instant createdAt;
 }

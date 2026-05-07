@@ -1,14 +1,23 @@
 package com.auction.app.domains.bid;
 
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.util.UUID;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class BidRequest {
-    private Long auctionId;
-    private Long auctionItemId;
-    private BigDecimal bidPrice;
+    @NotNull(message = "Auction ID is required")
+    private UUID auctionId;
+
+    @NotNull(message = "Bid amount is required")
+    @Positive(message = "Bid amount must be positive")
+    private Long amount;
 }

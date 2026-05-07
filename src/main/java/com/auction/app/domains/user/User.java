@@ -5,7 +5,10 @@ import com.auction.app.domains.bid.Bid;
 import com.auction.app.domains.product.Product;
 import com.auction.app.domains.transaction.Transaction;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,6 +22,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
 public class User {
@@ -62,4 +68,14 @@ public class User {
     // Transactions where this user was the one bidding/buying
     @OneToMany(mappedBy = "bidder", cascade = CascadeType.ALL)
     private List<Transaction> purchases;
+
+    @Transient
+    public UUID getId() {
+        return accountNumber;
+    }
+
+    @Transient
+    public void setId(UUID id) {
+        this.accountNumber = id;
+    }
 }

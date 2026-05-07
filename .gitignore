@@ -1,5 +1,8 @@
 HELP.md
 target/
+.env
+agent.md
+ws.md
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

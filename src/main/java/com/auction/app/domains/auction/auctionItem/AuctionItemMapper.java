@@ -36,7 +36,7 @@ public class AuctionItemMapper {
 
         if (bids != null && !bids.isEmpty()) {
             currentHighestBid = bids.stream()
-                    .map(Bid::getBidPrice)
+                    .map(bid -> BigDecimal.valueOf(bid.getAmount()))
                     .max(BigDecimal::compareTo)
                     .orElse(entity.getStartingPrice());
         }

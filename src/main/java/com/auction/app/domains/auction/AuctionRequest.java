@@ -1,34 +1,33 @@
 package com.auction.app.domains.auction;
 
-import com.auction.app.domains.auction.auctionItem.AuctionItemRequest;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AuctionRequest {
 
-    @NotBlank(message = "Auction title is required")
-    private String title;
+    @NotBlank(message = "Item name is required")
+    private String itemName;
 
-    private String description;
+    private String itemCategory;
 
-    @NotNull(message = "Start time is required")
-    @FutureOrPresent(message = "Start time cannot be in the past")
-    private LocalDateTime startTime;
+    @NotNull(message = "Auction type is required")
+    private AuctionType auctionType;
 
-    @NotNull(message = "End time is required")
-    @Future(message = "End time must be in the future")
-    private LocalDateTime endTime;
+    @NotNull(message = "Starting bid is required")
+    @Positive(message = "Starting bid must be positive")
+    private Long startingBid;
 
-    @NotEmpty(message = "You must include at least one item in the auction")
-    @Valid
-    private List<AuctionItemRequest> auctionItems;
+    private Long binPrice;  // Only required for BIN type
+
+    @NotNull(message = "Duration is required")
+    private String duration;  // e.g., "1h", "6h", "12h", "24h", "48h"
 }
