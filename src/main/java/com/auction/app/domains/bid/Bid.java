@@ -1,6 +1,6 @@
 package com.auction.app.domains.bid;
 
-import com.auction.app.domains.auction.Auction;
+import com.auction.app.domains.auction.auction.Auction;
 import com.auction.app.domains.auction.auctionItem.AuctionItem;
 import com.auction.app.domains.user.User;
 import jakarta.persistence.*;

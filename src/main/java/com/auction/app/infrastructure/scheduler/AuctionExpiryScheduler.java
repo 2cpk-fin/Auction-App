@@ -1,12 +1,11 @@
 package com.auction.app.infrastructure.scheduler;
 
-import com.auction.app.domains.auction.Auction;
-import com.auction.app.domains.auction.AuctionRepository;
-import com.auction.app.domains.auction.AuctionStatus;
-import com.auction.app.domains.auction.AuctionClaim;
-import com.auction.app.domains.auction.AuctionClaimRepository;
-import com.auction.app.domains.auction.AuctionClaimType;
-import com.auction.app.domains.bid.Bid;
+import com.auction.app.domains.auction.auction.Auction;
+import com.auction.app.domains.auction.auction.AuctionRepository;
+import com.auction.app.domains.auction.auction.AuctionStatus;
+import com.auction.app.domains.auction.auctionClaim.AuctionClaim;
+import com.auction.app.domains.auction.auctionClaim.AuctionClaimRepository;
+import com.auction.app.domains.auction.auctionClaim.AuctionClaimType;
 import com.auction.app.domains.bid.BidRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,6 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Component
 @EnableScheduling

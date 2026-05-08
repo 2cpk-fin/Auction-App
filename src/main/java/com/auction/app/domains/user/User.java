@@ -1,9 +1,8 @@
 package com.auction.app.domains.user;
 
-import com.auction.app.domains.auction.Auction;
+import com.auction.app.domains.auction.auction.Auction;
 import com.auction.app.domains.bid.Bid;
 import com.auction.app.domains.product.Product;
-import com.auction.app.domains.transaction.Transaction;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,14 +59,6 @@ public class User {
 
     @OneToMany(mappedBy = "bidder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bid> bidList;
-
-    // Transactions where this user was the one selling
-    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
-    private List<Transaction> sales;
-
-    // Transactions where this user was the one bidding/buying
-    @OneToMany(mappedBy = "bidder", cascade = CascadeType.ALL)
-    private List<Transaction> purchases;
 
     @Transient
     public UUID getId() {

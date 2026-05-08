@@ -1,12 +1,9 @@
 package com.auction.app.domains.auction.auctionItem;
 
-import com.auction.app.domains.auction.Auction;
+import com.auction.app.domains.auction.auction.Auction;
 import com.auction.app.domains.bid.Bid;
 import com.auction.app.domains.product.Product;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;

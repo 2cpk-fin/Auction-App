@@ -1,5 +1,7 @@
 package com.auction.app.domains.auction;
 
+import com.auction.app.domains.auction.auction.*;
+import com.auction.app.domains.auction.auctionClaim.AuctionClaimRepository;
 import com.auction.app.domains.auction.exceptions.BidTooLowException;
 import com.auction.app.domains.auction.exceptions.CannotBidOnOwnAuctionException;
 import com.auction.app.domains.auction.exceptions.AuctionExpiredException;

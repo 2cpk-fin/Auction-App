@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21"
+         xmlns:fx="http://javafx.com/fxml/1"
+         onMouseClicked="#handleClick"
+         spacing="8" alignment="TOP_CENTER"
+         style="-fx-background-color: #F8FAFC; -fx-background-radius: 12; -fx-padding: 15; -fx-cursor: hand;
+                 -fx-border-radius: 12;">
+
+    <Text text="📦" style="-fx-font-size: 28;"/>
+
+    <Label fx:id="productNameLabel"
+           text="Product Name"
+           style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+
+    <Label fx:id="priceLabel"
+           text="$0.00"
+           style="-fx-font-size: 12; -fx-text-fill: #4F46E5; -fx-font-weight: bold;"/>
+
+    <Label fx:id="quantityLabel"
+           text="Qty: 0"
+           style="-fx-font-size: 11; -fx-text-fill: #64748B;"/>
+</fx:root>

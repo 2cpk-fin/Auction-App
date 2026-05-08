@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<fx:root type="javafx.scene.layout.HBox" xmlns="http://javafx.com/javafx/21"
+         xmlns:fx="http://javafx.com/fxml/1"
+         onMouseClicked="#handleClick"
+         spacing="15" alignment="CENTER_LEFT"
+         style="-fx-padding: 12 15; -fx-background-color: #FFFFFF; -fx-border-color: #E2E8F0;
+                 -fx-border-width: 0 0 1 0; -fx-cursor: hand;">
+
+    <VBox spacing="4" HBox.hgrow="ALWAYS">
+        <Label fx:id="itemNameLabel"
+               text="Item Name"
+               style="-fx-font-size: 13; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+        <HBox spacing="8">
+            <Label fx:id="auctionTypeLabel"
+                   text="BIN"
+                   style="-fx-font-size: 11; -fx-font-weight: bold;"/>
+            <Label fx:id="priceLabel"
+                   text="$0"
+                   style="-fx-font-size: 12; -fx-text-fill: #4F46E5;"/>
+        </HBox>
+    </VBox>
+
+    <Label fx:id="timeRemainingLabel"
+           text="1h 30m"
+           style="-fx-font-size: 12; -fx-text-fill: #64748B;"/>
+</fx:root>
