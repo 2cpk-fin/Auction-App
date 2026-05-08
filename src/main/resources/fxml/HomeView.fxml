@@ -35,6 +35,7 @@
 
                 <!-- History -->
                 <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" alignment="CENTER" spacing="10"
+                      onMouseClicked="#goToHistory"
                       style="-fx-background-color: #F8FAFC; -fx-background-radius: 20; -fx-padding: 25; -fx-cursor: hand;">
                     <Text text="🕒" style="-fx-font-size: 30;"/>
                     <Label text="History" style="-fx-font-size: 13; -fx-font-weight: bold;"/>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<StackPane
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="com.auction.app.views.HistoryController"
+        prefWidth="400" prefHeight="800"
+        style="-fx-background-color: #FFFFFF; -fx-font-family: 'Segoe UI', Helvetica, sans-serif;">
+
+    <VBox spacing="0">
+        <!-- ── TOP APP BAR ── -->
+        <HBox alignment="CENTER_LEFT" spacing="15"
+              style="-fx-background-color: #FFFFFF;
+                     -fx-padding: 16 24;
+                     -fx-border-color: transparent transparent #F1F5F9 transparent;
+                     -fx-border-width: 0 0 1 0;">
+            <Button fx:id="backButton" onAction="#goBack" text="←"
+                    style="-fx-background-color: transparent; -fx-text-fill: #0F172A; -fx-font-size: 22; -fx-cursor: hand; -fx-padding: 0;"/>
+            <Label text="Auction History"
+                   style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+        </HBox>
+
+        <!-- ── SCROLLABLE CONTENT ── -->
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: #FFFFFF;"
+                    vbarPolicy="AS_NEEDED" hbarPolicy="NEVER">
+            <VBox spacing="24" style="-fx-padding: 20 24;">
+
+                <!-- STATS CARDS SECTION -->
+                <VBox spacing="12">
+                    <Label text="Player Stats" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                    
+                    <!-- Stats Grid -->
+                    <GridPane hgap="12" vgap="12" style="-fx-padding: 0;">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <!-- Total Coins Spent -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="0" alignment="TOP_LEFT" spacing="8"
+                              style="-fx-background-color: #F0F9FF; -fx-background-radius: 12; -fx-padding: 16; -fx-border-color: #E0F2FE; -fx-border-width: 1; -fx-border-radius: 12;">
+                            <Label text="💰 Coins Spent" style="-fx-font-size: 11; -fx-text-fill: #64748B;"/>
+                            <Label fx:id="totalSpentLabel" text="0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        </VBox>
+
+                        <!-- Total Coins Earned -->
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0" alignment="TOP_LEFT" spacing="8"
+                              style="-fx-background-color: #F0FDF4; -fx-background-radius: 12; -fx-padding: 16; -fx-border-color: #DCFCE7; -fx-border-width: 1; -fx-border-radius: 12;">
+                            <Label text="💵 Coins Earned" style="-fx-font-size: 11; -fx-text-fill: #64748B;"/>
+                            <Label fx:id="totalEarnedLabel" text="0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        </VBox>
+
+                        <!-- Total Coins Refunded -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" alignment="TOP_LEFT" spacing="8"
+                              style="-fx-background-color: #FEF3C7; -fx-background-radius: 12; -fx-padding: 16; -fx-border-color: #FDE68A; -fx-border-width: 1; -fx-border-radius: 12; -fx-opacity: 0.8;">
+                            <Label text="🔄 Refunded" style="-fx-font-size: 11; -fx-text-fill: #64748B;"/>
+                            <Label fx:id="totalRefundedLabel" text="0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        </VBox>
+
+                        <!-- Auctions Won -->
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1" alignment="TOP_LEFT" spacing="8"
+                              style="-fx-background-color: #F3E8FF; -fx-background-radius: 12; -fx-padding: 16; -fx-border-color: #E9D5FF; -fx-border-width: 1; -fx-border-radius: 12;">
+                            <Label text="🏆 Won" style="-fx-font-size: 11; -fx-text-fill: #64748B;"/>
+                            <Label fx:id="auctionsWonLabel" text="0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        </VBox>
+
+                        <!-- Auctions Sold -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="2" alignment="TOP_LEFT" spacing="8"
+                              style="-fx-background-color: #DBEAFE; -fx-background-radius: 12; -fx-padding: 16; -fx-border-color: #BAE6FD; -fx-border-width: 1; -fx-border-radius: 12;">
+                            <Label text="📦 Sold" style="-fx-font-size: 11; -fx-text-fill: #64748B;"/>
+                            <Label fx:id="auctionsSoldLabel" text="0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        </VBox>
+
+                        <!-- Total Bids Placed -->
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="2" alignment="TOP_LEFT" spacing="8"
+                              style="-fx-background-color: #FCE7F3; -fx-background-radius: 12; -fx-padding: 16; -fx-border-color: #FBCFE8; -fx-border-width: 1; -fx-border-radius: 12;">
+                            <Label text="📍 Bids Placed" style="-fx-font-size: 11; -fx-text-fill: #64748B;"/>
+                            <Label fx:id="totalBidsPlacedLabel" text="0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        </VBox>
+
+                        <!-- Win Rate -->
+                        <VBox GridPane.columnIndex="0" GridPane.rowIndex="3" alignment="TOP_LEFT" spacing="8"
+                              style="-fx-background-color: #F5F3FF; -fx-background-radius: 12; -fx-padding: 16; -fx-border-color: #EDE9FE; -fx-border-width: 1; -fx-border-radius: 12;">
+                            <Label text="📈 Win Rate" style="-fx-font-size: 11; -fx-text-fill: #64748B;"/>
+                            <Label fx:id="winRateLabel" text="0%" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        </VBox>
+
+                        <!-- Auctions Cancelled -->
+                        <VBox GridPane.columnIndex="1" GridPane.rowIndex="3" alignment="TOP_LEFT" spacing="8"
+                              style="-fx-background-color: #FEE2E2; -fx-background-radius: 12; -fx-padding: 16; -fx-border-color: #FECACA; -fx-border-width: 1; -fx-border-radius: 12;">
+                            <Label text="❌ Cancelled" style="-fx-font-size: 11; -fx-text-fill: #64748B;"/>
+                            <Label fx:id="auctionsCancelledLabel" text="0" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                        </VBox>
+                    </GridPane>
+                </VBox>
+
+                <!-- FILTER SECTION -->
+                <VBox spacing="12">
+                    <Label text="Event History" style="-fx-font-size: 14; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+                    
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <Label text="Filter:" style="-fx-font-size: 12; -fx-text-fill: #64748B;"/>
+                        <ComboBox fx:id="eventTypeFilter" prefWidth="200"
+                                  style="-fx-font-size: 12; -fx-padding: 8 12;">
+                            <tooltip>
+                                <Tooltip text="Filter events by type"/>
+                            </tooltip>
+                        </ComboBox>
+                    </HBox>
+
+                    <!-- TABLE VIEW -->
+                    <TableView fx:id="historyTable" prefHeight="400"
+                               style="-fx-font-size: 11; -fx-table-cell-border-color: #F1F5F9;">
+                        <columns>
+                            <TableColumn fx:id="dateColumn" text="Date" prefWidth="80" sortable="true"/>
+                            <TableColumn fx:id="eventColumn" text="Event" prefWidth="80" sortable="true"/>
+                            <TableColumn fx:id="auctionIdColumn" text="Auction ID" prefWidth="100" sortable="false"/>
+                            <TableColumn fx:id="amountColumn" text="Amount" prefWidth="80" sortable="false"/>
+                        </columns>
+                    </TableView>
+
+                    <!-- EMPTY STATE -->
+                    <Label fx:id="emptyStateLabel" text="No history records found."
+                           style="-fx-text-fill: #94A3B8; -fx-font-size: 13; -fx-padding: 40 0;">
+                    </Label>
+
+                    <!-- LOADING INDICATOR -->
+                    <ProgressIndicator fx:id="loadingIndicator" prefWidth="40" prefHeight="40"
+                                       style="-fx-padding: 20;"/>
+
+                </VBox>
+
+            </VBox>
+        </ScrollPane>
+    </VBox>
+</StackPane>
