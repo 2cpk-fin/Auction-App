@@ -48,9 +48,10 @@
                     <Label text="Create Auction" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
                 </VBox>
 
-                <!-- Market -->
-                <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" alignment="CENTER" spacing="10"
-                      style="-fx-background-color: #F8FAFC; -fx-background-radius: 20; -fx-padding: 25; -fx-cursor: hand;">
+            <!-- Market -->
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="1" alignment="CENTER" spacing="10"
+                onMouseClicked="#goToMarket"
+                style="-fx-background-color: #F8FAFC; -fx-background-radius: 20; -fx-padding: 25; -fx-cursor: hand;">
                     <Text text="🛒" style="-fx-font-size: 30;"/>
                     <Label text="Market" style="-fx-font-size: 13; -fx-font-weight: bold;"/>
                 </VBox>
@@ -80,9 +81,9 @@
             <Label text="Overview" style="-fx-font-size: 11; -fx-text-fill: #94A3B8;"/>
         </VBox>
 
-        <VBox alignment="CENTER" spacing="4" style="-fx-cursor: hand;">
-            <Text text="💳" style="-fx-font-size: 20; -fx-fill: #94A3B8;"/>
-            <Label text="Wallet" style="-fx-font-size: 11; -fx-text-fill: #94A3B8;"/>
+        <VBox alignment="CENTER" spacing="4" onMouseClicked="#goToInventory" style="-fx-cursor: hand;">
+            <Text text="🎒" style="-fx-font-size: 20; -fx-fill: #94A3B8;"/>
+            <Label text="Inventory" style="-fx-font-size: 11; -fx-text-fill: #94A3B8;"/>
         </VBox>
 
         <VBox alignment="CENTER" spacing="4" onMouseClicked="#goToProfile" style="-fx-cursor: hand;">

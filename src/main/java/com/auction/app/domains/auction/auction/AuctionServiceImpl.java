@@ -1,29 +1,39 @@
 package com.auction.app.domains.auction.auction;
 
-import com.auction.app.domains.auction.auctionClaim.*;
-import com.auction.app.domains.auction.exceptions.*;
-import com.auction.app.domains.bid.Bid;
-import com.auction.app.domains.bid.BidMapper;
-import com.auction.app.domains.bid.BidRepository;
-import com.auction.app.domains.bid.BidResponse;
-import com.auction.app.domains.user.User;
-import com.auction.app.domains.user.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.auction.app.domains.auction.auctionClaim.AuctionClaim;
+import com.auction.app.domains.auction.auctionClaim.AuctionClaimMapper;
+import com.auction.app.domains.auction.auctionClaim.AuctionClaimRepository;
+import com.auction.app.domains.auction.auctionClaim.AuctionClaimResponse;
+import com.auction.app.domains.auction.auctionClaim.AuctionClaimType;
+import com.auction.app.domains.auction.exceptions.AuctionAlreadySoldException;
+import com.auction.app.domains.auction.exceptions.AuctionExpiredException;
+import com.auction.app.domains.auction.exceptions.AuctionNotFoundException;
+import com.auction.app.domains.auction.exceptions.BidTooLowException;
+import com.auction.app.domains.auction.exceptions.CannotBidOnOwnAuctionException;
+import com.auction.app.domains.auction.exceptions.TooManyActiveAuctionsException;
+import com.auction.app.domains.bid.Bid;
+import com.auction.app.domains.bid.BidMapper;
+import com.auction.app.domains.bid.BidRepository;
+import com.auction.app.domains.bid.BidResponse;
+import com.auction.app.domains.user.User;
+import com.auction.app.domains.user.UserRepository;
+
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class AuctionServiceImpl implements AuctionService {
 
     private final AuctionRepository auctionRepository;
@@ -33,6 +43,23 @@ public class AuctionServiceImpl implements AuctionService {
     private final BidRepository bidRepository;
     private final BidMapper bidMapper;
     private final UserRepository userRepository;
+
+    @Autowired
+    public AuctionServiceImpl(AuctionRepository auctionRepository,
+                              AuctionMapper auctionMapper,
+                              AuctionClaimRepository claimRepository,
+                              @Qualifier("auctionClaimMapperComponent") AuctionClaimMapper claimMapper,
+                              BidRepository bidRepository,
+                              BidMapper bidMapper,
+                              UserRepository userRepository) {
+        this.auctionRepository = auctionRepository;
+        this.auctionMapper = auctionMapper;
+        this.claimRepository = claimRepository;
+        this.claimMapper = claimMapper;
+        this.bidRepository = bidRepository;
+        this.bidMapper = bidMapper;
+        this.userRepository = userRepository;
+    }
 
     @Value("${auction.max-active-per-player:3}")
     private int maxActiveAuctions;

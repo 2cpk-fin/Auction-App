@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.auction.app.views.MarketController"
+      prefWidth="480" prefHeight="800"
+      style="-fx-background-color: #FFFFFF; -fx-font-family: 'Segoe UI', sans-serif;">
+
+    <!-- TOP HEADER WITH BACK BUTTON -->
+    <HBox alignment="CENTER_LEFT" spacing="15" style="-fx-padding: 12 16 10 16; -fx-border-color: #E2E8F0 transparent transparent transparent;">
+        <Button text="← Back" onAction="#handleBack"
+                style="-fx-padding: 8 12; -fx-font-size: 13; -fx-background-color: #F1F5F9; -fx-border-radius: 6; -fx-cursor: hand;"/>
+        <Label text="Market" style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #0F172A;"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <!-- SEARCH & FILTER BAR -->
+    <HBox spacing="10" style="-fx-padding: 18 16 10 16; -fx-alignment: CENTER_LEFT;">
+        <TextField fx:id="searchField" promptText="Search item name..." HBox.hgrow="ALWAYS"
+                   style="-fx-background-radius: 10; -fx-border-color: #E6EEF9; -fx-padding: 8; -fx-focus-color: #4F46E5;"/>
+
+        <ComboBox fx:id="categoryCombo" prefWidth="120" promptText="Category"
+                  style="-fx-background-radius: 10; -fx-border-color: #E6EEF9; -fx-padding: 6;"/>
+
+        <ComboBox fx:id="auctionTypeCombo" prefWidth="110"
+                  style="-fx-background-radius: 10; -fx-border-color: #E6EEF9; -fx-padding: 6;"/>
+    </HBox>
+
+    <HBox spacing="10" style="-fx-padding: 0 16 10 16; -fx-alignment: CENTER_LEFT;">
+        <TextField fx:id="minPriceField" promptText="Min price" prefWidth="120"
+                   style="-fx-background-radius: 10; -fx-border-color: #E6EEF9; -fx-padding: 8;"/>
+        <TextField fx:id="maxPriceField" promptText="Max price" prefWidth="120"
+                   style="-fx-background-radius: 10; -fx-border-color: #E6EEF9; -fx-padding: 8;"/>
+
+        <Button fx:id="searchButton" text="Search" onAction="#handleSearch"
+                style="-fx-background-color: #4F46E5; -fx-text-fill: white; -fx-background-radius: 10; -fx-padding: 8 14;"/>
+    </HBox>
+
+    <!-- RESULTS AREA -->
+    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+    <FlowPane fx:id="resultsFlow" hgap="8" vgap="6" style="-fx-padding: 10;" prefWrapLength="420"/>
+    </ScrollPane>
+
+    <!-- PAGINATION -->
+    <HBox spacing="12" alignment="CENTER" style="-fx-padding: 12 16 18 16; -fx-border-color: transparent transparent #F1F5F9 transparent;">
+        <Button fx:id="prevButton" text="Previous" onAction="#handlePrev"
+                style="-fx-background-color: #EEF2FF; -fx-text-fill: #4F46E5; -fx-background-radius: 8; -fx-padding: 6 12;"/>
+        <Label fx:id="pageInfoLabel" text="Page 1 of 1" style="-fx-text-fill: #0F172A; -fx-font-weight: bold;"/>
+        <Button fx:id="nextButton" text="Next" onAction="#handleNext"
+                style="-fx-background-color: #EEF2FF; -fx-text-fill: #4F46E5; -fx-background-radius: 8; -fx-padding: 6 12;"/>
+    </HBox>
+
+</VBox>

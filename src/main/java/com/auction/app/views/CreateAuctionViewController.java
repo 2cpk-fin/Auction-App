@@ -4,6 +4,7 @@ import com.auction.app.domains.auction.auction.AuctionResponse;
 import com.auction.app.domains.auction.auction.AuctionType;
 import com.auction.app.domains.product.ProductResponse;
 import com.auction.app.infrastructure.client.ApiClient;
+import com.auction.app.domains.product.ProductService;
 import com.auction.app.infrastructure.session.UserSession;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
@@ -27,6 +28,7 @@ import com.auction.app.views.components.AuctionItemComponent;
 
 import java.io.IOException;
 import java.util.List;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.UUID;
 
 @Component
@@ -37,6 +39,7 @@ public class CreateAuctionViewController {
     private final ApplicationContext springContext;
     private final ApiClient apiClient;
     private final UserSession userSession;
+    private final ProductService productService;
 
     // Search section
     @FXML
@@ -119,7 +122,7 @@ public class CreateAuctionViewController {
                 UUID sellerId = userSession.getCurrentUserId();
                 String endpoint = "/api/auctions/seller/" + sellerId;
                 // Note: API endpoint may vary; adjust based on actual REST API
-                List<AuctionResponse> auctions = apiClient.get(endpoint, List.class, userSession.getToken());
+                List<AuctionResponse> auctions = apiClient.get(endpoint, new TypeReference<List<AuctionResponse>>() {}, userSession.getToken());
                 Platform.runLater(() -> {
                     populateAuctionsStrip(auctions != null ? auctions : List.of());
                     showLoading(false);
@@ -141,14 +144,12 @@ public class CreateAuctionViewController {
         showLoading(true);
         new Thread(() -> {
             try {
-                UUID userId = userSession.getCurrentUserId();
-                String endpoint = "/api/products?userId=" + userId;
-                if (query != null && !query.isEmpty()) {
-                    endpoint += "&name=" + query;
-                }
-                List<ProductResponse> products = apiClient.get(endpoint, List.class, userSession.getToken());
+                String email = userSession.getCurrentUser() != null ? userSession.getCurrentUser().getEmail() : null;
+                final List<ProductResponse> products = email != null
+                        ? productService.searchUserProducts(email, query == null || query.isEmpty() ? null : query, null)
+                        : List.of();
                 Platform.runLater(() -> {
-                    populateProductGrid(products != null ? products : List.of());
+                    populateProductGrid(products);
                     showLoading(false);
                 });
             } catch (Exception e) {
@@ -185,11 +186,14 @@ public class CreateAuctionViewController {
         for (Object obj : products) {
             ProductResponse product = (ProductResponse) obj;
             try {
+                ProductItemComponent controller = springContext.getBean(ProductItemComponent.class);
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/components/ProductItem.fxml"));
-                loader.setControllerFactory(springContext::getBean);
-                VBox productItem = loader.load();
+                loader.setRoot(controller);
+                loader.setController(controller);
+                loader.load();
 
-                ProductItemComponent controller = loader.getController();
+                VBox productItem = controller;
+
                 controller.setProduct(product);
                 controller.setOnProductSelected(selected -> {
                     selectProduct(selected);
@@ -212,6 +216,11 @@ public class CreateAuctionViewController {
         this.selectedProduct = product;
         showFormPanel();
         updateFormWithProduct();
+    }
+
+    // Public method to allow other controllers to preselect a product
+    public void setSelectedProduct(ProductResponse product) {
+        selectProduct(product);
     }
 
     private void updateFormWithProduct() {

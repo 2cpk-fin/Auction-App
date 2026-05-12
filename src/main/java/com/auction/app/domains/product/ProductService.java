@@ -4,9 +4,14 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+
+import com.auction.app.domains.user.UserRepository;
+import com.auction.app.domains.user.User;
 
 @Service
 public class ProductService {
@@ -25,11 +30,27 @@ public class ProductService {
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Transactional(readOnly = true)
     public List<ProductResponse> searchUserProducts(String email, String keyword, List<Long> tagIds) {
-        return productRepository.searchUserProducts(email, keyword, tagIds)
-                .stream()
-                .map(productMapper::toProductResponse)
-                .toList();
+        // Resolve owner id from email, then query by owner id to ensure matching owner_id column
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        if (userOpt.isPresent()) {
+        Long ownerId = userOpt.get().getUserId();
+        if (tagIds == null || tagIds.isEmpty()) {
+        return productRepository.searchUserProductsByOwnerIdNoTags(ownerId, keyword)
+            .stream()
+            .map(productMapper::toProductResponse)
+            .toList();
+        }
+        return productRepository.searchUserProductsByOwnerId(ownerId, keyword, tagIds)
+            .stream()
+            .map(productMapper::toProductResponse)
+            .toList();
+        }
+        return List.of();
     }
 
     public ProductResponse addProduct(String email, ProductRequest productRequest) {

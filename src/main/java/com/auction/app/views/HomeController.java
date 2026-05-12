@@ -1,12 +1,7 @@
 package com.auction.app.views;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.stage.Stage;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,7 +9,13 @@ import org.springframework.stereotype.Component;
 import com.auction.app.domains.auth.AuthResponse;
 import com.auction.app.infrastructure.session.UserSession;
 
-import java.io.IOException;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @Scope("prototype")
@@ -89,6 +90,38 @@ public class HomeController {
             stage.show();
         } catch (IOException e) {
             System.err.println("Failed to load CreateAuctionView: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToMarket() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/market-page.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Parent root = loader.load();
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+            stage.setTitle("Market — BidVault");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            System.err.println("Failed to load Market view: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void goToInventory() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/InventoryView.fxml"));
+            loader.setControllerFactory(springContext::getBean);
+            Parent root = loader.load();
+            Stage stage = (Stage) welcomeLabel.getScene().getWindow();
+            stage.setTitle("Inventory — BidVault");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            System.err.println("Failed to load Inventory view: " + e.getMessage());
             e.printStackTrace();
         }
     }

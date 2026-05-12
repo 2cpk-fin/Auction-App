@@ -77,4 +77,8 @@ public class Auction {
     @Builder.Default
     private Set<UUID> bidderNotifications = new HashSet<>();
 
+    //add  new
+    @OneToMany(mappedBy = "auction", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<AuctionTag> auctionTags = new HashSet<>();
 }

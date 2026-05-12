@@ -1,14 +1,17 @@
 package com.auction.app.infrastructure.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -54,6 +57,34 @@ public class ApiClient {
      */
     public <T> T get(String endpoint, Class<T> responseType) throws Exception {
         return get(endpoint, responseType, null);
+    }
+
+    /**
+     * GET with Jackson TypeReference (useful for generic types like List<T>)
+     */
+    public <T> T get(String endpoint, TypeReference<T> typeRef, String authToken) throws Exception {
+        String url = baseUrl + endpoint;
+        log.debug("GET request to: {}", url);
+
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+                .uri(new URI(url))
+                .GET();
+
+        if (authToken != null) {
+            requestBuilder.header("Authorization", "Bearer " + authToken);
+        }
+
+        HttpRequest request = requestBuilder
+                .header("Content-Type", "application/json")
+                .build();
+
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() >= 400) {
+            throw new ApiException("GET request failed with status " + response.statusCode() + ": " + response.body());
+        }
+
+        return objectMapper.readValue(response.body(), typeRef);
     }
 
     /**

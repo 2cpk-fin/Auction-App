@@ -12,16 +12,38 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query("SELECT DISTINCT p FROM Product p " +
-            "JOIN p.owner u " +
-            "LEFT JOIN p.tags t " +
+    @Query(value = "SELECT DISTINCT p.* FROM products p " +
+            "JOIN users u ON u.user_id = p.owner_id " +
+            "LEFT JOIN products_tags t ON p.product_id = t.product_id " +
             "WHERE u.email = :email " +
-            "AND (:keyword IS NULL OR LOWER(p.productName) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
-            "AND (:tagIds IS NULL OR t.id IN :tagIds)")
+            "AND (:keyword IS NULL OR LOWER(CAST(p.product_name AS text)) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            "AND (:tagIds IS NULL OR t.tag_id IN (:tagIds))", nativeQuery = true)
     List<Product> searchUserProducts(
             @Param("email") String email,
             @Param("keyword") String keyword,
             @Param("tagIds") List<Long> tagIds
+    );
+
+    @Query(value = "SELECT DISTINCT p.* FROM products p " +
+            "JOIN users u ON u.user_id = p.owner_id " +
+            "LEFT JOIN products_tags t ON p.product_id = t.product_id " +
+            "WHERE u.user_id = :ownerId " +
+            "AND (:keyword IS NULL OR LOWER(CAST(p.product_name AS text)) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
+            "AND (:tagIds IS NULL OR t.tag_id IN (:tagIds))", nativeQuery = true)
+    List<Product> searchUserProductsByOwnerId(
+            @Param("ownerId") Long ownerId,
+            @Param("keyword") String keyword,
+            @Param("tagIds") List<Long> tagIds
+    );
+
+    @Query(value = "SELECT DISTINCT p.* FROM products p " +
+            "JOIN users u ON u.user_id = p.owner_id " +
+            "LEFT JOIN products_tags t ON p.product_id = t.product_id " +
+            "WHERE u.user_id = :ownerId " +
+            "AND (:keyword IS NULL OR LOWER(CAST(p.product_name AS text)) LIKE LOWER(CONCAT('%', :keyword, '%')))", nativeQuery = true)
+    List<Product> searchUserProductsByOwnerIdNoTags(
+            @Param("ownerId") Long ownerId,
+            @Param("keyword") String keyword
     );
 
 }

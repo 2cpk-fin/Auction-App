@@ -2,7 +2,7 @@ package com.auction.app.domains.auction.auctionClaim;
 
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("auctionClaimMapperComponent")
 public class AuctionClaimMapper {
 
     public AuctionClaimResponse toResponse(AuctionClaim claim, Long coinAmount) {
