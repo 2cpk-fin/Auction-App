@@ -19,6 +19,8 @@ public class AuctionRequest {
 
     private String itemCategory;
 
+    private Long productId;
+
     @NotNull(message = "Auction type is required")
     private AuctionType auctionType;
 

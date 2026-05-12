@@ -43,6 +43,8 @@ public class AuctionServiceImpl implements AuctionService {
     private final BidRepository bidRepository;
     private final BidMapper bidMapper;
     private final UserRepository userRepository;
+    private final com.auction.app.domains.product.ProductRepository productRepository;
+    private final com.auction.app.domains.tag.TagRepository tagRepository;
 
     @Autowired
     public AuctionServiceImpl(AuctionRepository auctionRepository,
@@ -51,7 +53,9 @@ public class AuctionServiceImpl implements AuctionService {
                               @Qualifier("auctionClaimMapperComponent") AuctionClaimMapper claimMapper,
                               BidRepository bidRepository,
                               BidMapper bidMapper,
-                              UserRepository userRepository) {
+                              UserRepository userRepository,
+                              com.auction.app.domains.product.ProductRepository productRepository,
+                              com.auction.app.domains.tag.TagRepository tagRepository) {
         this.auctionRepository = auctionRepository;
         this.auctionMapper = auctionMapper;
         this.claimRepository = claimRepository;
@@ -59,6 +63,8 @@ public class AuctionServiceImpl implements AuctionService {
         this.bidRepository = bidRepository;
         this.bidMapper = bidMapper;
         this.userRepository = userRepository;
+        this.productRepository = productRepository;
+        this.tagRepository = tagRepository;
     }
 
     @Value("${auction.max-active-per-player:3}")
@@ -96,6 +102,28 @@ public class AuctionServiceImpl implements AuctionService {
         auction.setStartTime(startTime);
         auction.setEndTime(endTime);
         auction.setStatus(AuctionStatus.ACTIVE);
+
+        // Attach product (if provided) and copy its tags into auctionTags
+        if (request.getProductId() != null) {
+            com.auction.app.domains.product.Product product = productRepository.findById(request.getProductId())
+                    .orElseThrow(() -> new RuntimeException("Product not found"));
+            auction.setProduct(product);
+
+            if (product.getTags() != null) {
+                for (com.auction.app.domains.tag.Tag prodTag : product.getTags()) {
+                    AuctionTagKey key = new AuctionTagKey();
+                    key.setAuctionId(auction.getId());
+                    key.setTagId(prodTag.getTagId());
+
+                    AuctionTag auctionTag = AuctionTag.builder()
+                            .id(key)
+                            .auction(auction)
+                            .tag(prodTag)
+                            .build();
+                    auction.getAuctionTags().add(auctionTag);
+                }
+            }
+        }
 
         auctionRepository.save(auction);
         return auctionMapper.toResponse(auction);
