@@ -81,6 +81,7 @@ public class AuctionServiceImpl implements AuctionService {
         return auctionMapper.toResponse(auction);
     }
 
+    // Searching methods
     @Override
     public Page<AuctionResponse> searchAuctions(String category, String auctionType, Long minPrice, Long maxPrice, String itemName, Pageable pageable) {
         AuctionType type = auctionType != null ? AuctionType.valueOf(auctionType.toUpperCase()) : null;
@@ -154,6 +155,7 @@ public class AuctionServiceImpl implements AuctionService {
         return bidMapper.toResponse(bid);
     }
 
+    // BIN type
     @Override
     public AuctionResponse buyInstant(UUID auctionId, UUID buyerId) {
         Auction auction = auctionRepository.findById(auctionId)

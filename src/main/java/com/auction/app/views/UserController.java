@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import com.auction.app.domains.user.UserResponse;
-import com.auction.app.domains.user.UserService;
+import com.auction.app.domains.user.UserServiceImpl;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final ApplicationContext springContext;
 
     @FXML

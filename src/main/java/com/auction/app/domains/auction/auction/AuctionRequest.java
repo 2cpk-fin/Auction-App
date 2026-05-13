@@ -26,8 +26,8 @@ public class AuctionRequest {
     @Positive(message = "Starting bid must be positive")
     private Long startingBid;
 
-    private Long binPrice; // Only required for BIN type
+    private Long binPrice;
 
     @NotNull(message = "Duration is required")
-    private String duration; // e.g., "1h", "6h", "12h", "24h", "48h"
+    private String duration;
 }

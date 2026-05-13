@@ -1,18 +1,20 @@
 package com.auction.app.domains.product;
 
-import com.auction.app.domains.tag.TagResponse;
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.*;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductResponse {
-    private Long productId;
+    private UUID id;
     private String productName;
+    private Category category;
     private BigDecimal price;
     private Integer quantity;
-    private List<TagResponse> tags;
+    private Set<Tag> tags;
 }

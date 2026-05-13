@@ -1,58 +1,29 @@
 package com.auction.app.domains.product;
 
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.stereotype.Service;
-
+import com.auction.app.domains.user.User;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
-@Service
-public class ProductService {
-    /*
-        My Storage View
-        - Users can add products to their storage
-        - Users can see what they have in the storage
-        - They can search for product in their storage as well
-        - They can also change the description of the product or delete it
-    */
+public interface ProductService {
 
+    /**
+     * Search within a specific user's storage using filters.
+     */
+    List<ProductResponse> searchStorage(String email, String keyword, Category category, Set<Tag> tags);
 
-    @Autowired
-    private ProductRepository productRepository;
+    /**
+     * Adds a new product to the user's storage.
+     */
+    ProductResponse addProduct(User user, ProductRequest productRequest);
 
-    @Autowired
-    private ProductMapper productMapper;
+    /**
+     * Updates an existing product in storage if the user owns it.
+     */
+    ProductResponse updateProduct(String email, ProductRequest productRequest, UUID productId);
 
-    public List<ProductResponse> searchUserProducts(String email, String keyword, List<Long> tagIds) {
-        return productRepository.searchUserProducts(email, keyword, tagIds)
-                .stream()
-                .map(productMapper::toProductResponse)
-                .toList();
-    }
-
-    public ProductResponse addProduct(String email, ProductRequest productRequest) {
-        Product newProduct = productMapper.toProduct(email, productRequest);
-        productRepository.save(newProduct);
-        return productMapper.toProductResponse(newProduct);
-    }
-
-    public ProductResponse updateProduct(String email, ProductRequest productRequest, Long productId) {
-        Product product = findById(productId, email);
-        productMapper.updateProductFromRequest(productRequest, product);
-        productRepository.save(product);
-        return productMapper.toProductResponse(product);
-    }
-
-    public void deleteProduct(String email, Long productId) {
-        findById(productId, email);
-        productRepository.deleteById(productId);
-    }
-
-    private Product findById(Long productId, String email) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new EntityNotFoundException("Product not found"));
-        if (!Objects.equals(product.getOwner().getEmail(), email)) throw new AccessDeniedException("You don't have permission to this product");
-        return product;
-    }
+    /**
+     * Deletes a product from storage if the user owns it.
+     */
+    void deleteProduct(String email, UUID productId);
 }

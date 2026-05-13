@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public interface AuctionService {
 
+    // User create auction here
     AuctionResponse createAuction(AuctionRequest request, UUID sellerId);
 
     AuctionResponse getAuctionById(UUID id);

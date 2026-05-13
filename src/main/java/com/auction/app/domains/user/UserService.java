@@ -1,64 +1,17 @@
 package com.auction.app.domains.user;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.UUID;
 
-@Service
-@RequiredArgsConstructor
-public class UserService {
+public interface UserService {
+    UserResponse getUserByEmail(String email);
 
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
+    UserResponse updateUsername(String email, String newUsername);
 
-    public UserResponse getUserById(Long userId) {
-        return userMapper.userToResponse(findUserById(userId));
-    }
+    UserResponse updateEmail(String email, String newEmail);
 
-    @Transactional
-    public UserResponse updateUsername(Long userId, String newUsername) {
-        User user = findUserById(userId);
-        if (newUsername != null && !newUsername.isBlank()) {
-            user.setUsername(newUsername);
-        }
-        return userMapper.userToResponse(userRepository.save(user));
-    }
+    UserResponse updateProfileImage(String email, String imagePath);
 
-    @Transactional
-    public UserResponse updateEmail(Long userId, String newEmail) {
-        User user = findUserById(userId);
-        if (newEmail != null && !newEmail.isBlank()) {
-            // In a real app, check if email is already in use here
-            user.setEmail(newEmail);
-        }
-        return userMapper.userToResponse(userRepository.save(user));
-    }
+    void updatePassword(String email, String oldPassword, String newPassword);
 
-    @Transactional
-    public void updatePassword(Long userId, String newPassword) {
-        User user = findUserById(userId);
-
-        // Check for the old password for verification
-        if (!passwordEncoder.matches(newPassword, user.getPassword())) {
-            throw new RuntimeException("Wrong password");
-        }
-
-        // Update new password
-        if (newPassword != null && newPassword.length() >= 6) {
-            user.setPassword(passwordEncoder.encode(newPassword));
-            userRepository.save(user);
-        }
-    }
-
-    public void deleteUserById(Long userId) {
-        userRepository.deleteById(userId);
-    }
-
-    // Helper
-    private User findUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-    }
+    void deleteUserByEmail(String email);
 }
